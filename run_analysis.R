@@ -1,4 +1,7 @@
 library(dplyr)
+
+writeIntermediateFiles <- FALSE
+
 # Run Analysis
 
 # This Script does the following tasks:
@@ -24,11 +27,17 @@ train_activities <- read.table("y_train.txt")
 
 # Step 1: Merge the training and tests data sets
 allObservations <- rbind(train_observations, test_observations)
+if (writeIntermediateFiles) {
+	write.csv(allObservations, "step1.csv")
+}
 
 # 2- Extracts only the measurements on the mean and standard deviation 
 # for each measurement.
 names(allObservations) <- features[,2]
 allObservations <- allObservations[,grepl("(mean\\(\\)|-std\\(\\))", colnames(allObservations))]
+if (writeIntermediateFiles) {
+	write.csv(allObservations, "step2.csv")
+}
 
 # 3- Uses descriptive activity names to name the activities in the data set
 allsubjects = rbind(train_subject, test_subject)
@@ -39,6 +48,9 @@ allObservations$activities <- allactivities$V1
 
 allObservations <- merge(allObservations, activity_labels, by.x = "activities", by.y = "V1")
 allObservations <- rename(allObservations, activity_name= V2)
+if (writeIntermediateFiles) {
+	write.csv(allObservations, "step3.csv")
+}
 
 # 4 - Appropriately labels the data set with descriptive variable names.
 # Renames the variables with relevant names - Requirement 4
@@ -53,6 +65,9 @@ varNames <- gsub("-std\\(\\)", "_StandardDeviation", varNames)
 varNames <- gsub("-mean\\(\\)", "_Mean", varNames)
 varNames <- gsub("-", "_", varNames)
 names(allObservations) <- varNames
+if (writeIntermediateFiles) {
+	write.csv(allObservations, "step4.csv")
+}
 
 # 5- From the data set in step 4, creates a second, independent tidy data set with 
 #    the average of each variable for each activity and each subject.
