@@ -58,7 +58,6 @@ names(allObservations) <- varNames
 #    the average of each variable for each activity and each subject.
 
 activity_subject <- mutate(allObservations, groupingVariable = paste(activity_name, observation_subjects))
-write.csv(activity_subject, "activity_subject.csv")
 activity_subject <-group_by(activity_subject, factor(groupingVariable))
 tidy_dataset <- summarize(
 	activity_subject, 
