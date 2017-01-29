@@ -71,9 +71,7 @@ if (writeIntermediateFiles) {
 
 # 5- From the data set in step 4, creates a second, independent tidy data set with 
 #    the average of each variable for each activity and each subject.
-
-activity_subject <- mutate(allObservations, groupingVariable = paste(activity_name, observation_subjects))
-activity_subject <-group_by(activity_subject, factor(groupingVariable))
+activity_subject <-group_by(activity_subject, activity_name, observation_subjects)
 tidy_dataset <- summarize(
 	activity_subject, 
 	mean_time_BodyAccelerometer_Mean_X = mean(time_BodyAccelerometer_Mean_X),
